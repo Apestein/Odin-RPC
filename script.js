@@ -5,40 +5,43 @@ function computerPlay() {
     else return "scissors";
 }
 
-function playRound(playerSelection, computerSelection) {
-    let catString = playerSelection.toLowerCase() + computerSelection.toLowerCase();
+function playRound() {
+    let result = "";
+    let playerSelection = this.id;
+    let computerSelection = computerPlay();
+    let catString = playerSelection + computerSelection;
     console.log(catString);
     if (catString.includes("rock") && catString.includes("paper")) {
         if (catString.indexOf("rock") === 0) {
-            return "You lose, paper beats rock!";
-        } else return "You win, paper beats rock!";
+            result = "You lose, paper beats rock!";
+        } else result = "You win, paper beats rock!";
     } else if (catString.includes("rock") && catString.includes("scissors")) {
         if (catString.indexOf("rock") === 0) {
-            return "You win, rock beats scissors!";
-        } else return "You lose, rock beats scissors!";
+            result = "You win, rock beats scissors!";
+        } else result = "You lose, rock beats scissors!";
     } else if (catString.includes("paper") && catString.includes("scissors")) {
         if (catString.indexOf("paper") === 0) {
-            return "You lose, scissors beat paper!";   
-        } else return "You win, scissors beat paper!";   
+            result = "You lose, scissors beat paper!";   
+        } else result = "You win, scissors beat paper!";   
     } else if (playerSelection.toLowerCase() === computerSelection) {
-        return "Tie!";
-    } else return "Error!";
+        result = "Tie!";
+    } else result = "Error!";
+
+    if (result.includes("win")) playerScore++;
+    else if (result.includes("Tie")) {
+        playerScore++; computerScore++;
+    } else if (result.includes("lose")) computerScore++;
+
+    const div = document.querySelector('div');
+    div.textContent = result;
+
+    const divEnd = document.querySelector('#end');
+    if (playerScore === 5) divEnd.textContent = `You won the match! ${playerScore}:${computerScore}`;
+    else if (computerScore === 5) divEnd.textContent = `You lost the match! ${playerScore}:${computerScore}`;
+    else if (computerScore === 5 && playerScore === 5) divEnd.textContent = `That match was a tie! ${playerScore}:${computerScore}`;
 }
 
-function game() {
-    let playerScore = 0;
-    let computerScore = 0;
-    for (let i = 0; i < 5; i++) {
-        let playerSelection = prompt("Pick rock, paper, or scissors");
-        let computerSelection = computerPlay();
-        let result = playRound(playerSelection, computerSelection);
-        console.log(result);
-        if (result.includes("win")) playerScore++;
-        else if (result.includes("Tie")) {
-            playerScore++; computerScore++;
-        } else computerScore++;
-    }
-    if (playerScore > computerScore) console.log(`You won the match! ${playerScore}:${computerScore}`);
-    else if (playerScore < computerScore) console.log(`You lost the match! ${playerScore}:${computerScore}`);
-    else console.log(`That match was a tie! ${playerScore}:${computerScore}`);
-}
+let playerScore = 0;
+let computerScore = 0;
+const buttons = document.querySelectorAll('button');
+buttons.forEach((button) => button.addEventListener('click', playRound));
