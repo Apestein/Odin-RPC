@@ -32,16 +32,35 @@ function playRound() {
         playerScore++; computerScore++;
     } else if (result.includes("lose")) computerScore++;
 
-    const div = document.querySelector('div');
-    div.textContent = result;
+    divResult.textContent = result;
 
-    const divEnd = document.querySelector('#end');
     if (playerScore === 5) divEnd.textContent = `You won the match! ${playerScore}:${computerScore}`;
     else if (computerScore === 5) divEnd.textContent = `You lost the match! ${playerScore}:${computerScore}`;
     else if (computerScore === 5 && playerScore === 5) divEnd.textContent = `That match was a tie! ${playerScore}:${computerScore}`;
+
+    if (playerScore === 5 || computerScore === 5) {
+        buttons.forEach((button) => button.disabled = true);
+        const endGame = document.createElement('button');
+        endGame.textContent = "Play Again";
+        endGame.onclick = resetGame;
+        body.appendChild(endGame);
+    }
 }
+
+function resetGame() {
+    buttons.forEach((button) => button.disabled = false);
+    playerScore = 0;
+    computerScore = 0;
+    divResult.textContent = "";
+    divEnd.textContent = "";
+    this.remove();
+}
+
 
 let playerScore = 0;
 let computerScore = 0;
+const body = document.querySelector('body');
+const divResult = document.querySelector('#result');
+const divEnd = document.querySelector('#end');
 const buttons = document.querySelectorAll('button');
 buttons.forEach((button) => button.addEventListener('click', playRound));
